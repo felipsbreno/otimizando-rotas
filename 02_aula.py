@@ -8,6 +8,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 
 from time import sleep
+import pulp
+import itertools
 
 service = Service()
 options = webdriver.ChromeOptions()
@@ -102,6 +104,47 @@ def generate_pares_distance(address):
     return distance_pares
 
 
+def generate_optimize(address, distance_pares):
+    def distance(end1, end2):
+        return distance_pares[f'{end1}_{end2}']
+    
+    prob = pulp.LpProblem('TSP', pulp.LpMinimize)
+    x = pulp.LpVariable.dicts('x', [(i, j) for i in range(len(address)) for j in range(len(address)) if i != j], cat='Binary')
+    prob += pulp.lpSum([distance(i, j) * x[(i, j)] for i in range(len(address)) for j in range(len(address)) if i != j])
+
+    # Restrição para entrar e sair uma vez da cidade
+    for i in range(len(address)):
+        prob += pulp.lpSum([x[(i, j)] for j in range(len(address)) if i != j]) == 1
+        prob += pulp.lpSum([x[(j, i)] for j in range(len(address)) if i != j]) == 1
+
+    # Restrição para evitar subturs
+    for k in range(len(address)):
+        for S in range(2, len(address)):
+            for subset in itertools.combinations([i for i in range(len(address)) if i != k], S):
+                prob += pulp.lpSum([x[(i, j)] for i in subset for j in subset if i != j]) <= len(subset) - 1
+
+    prob.solve(pulp.PULP_CBC_CMD())
+    
+    solved = []
+    init_city = 0
+    next_city = init_city
+
+    while True:
+        for j in range(len(address)):
+            if j != next_city and x[(next_city, j)].value() == 1:
+                solved.append((next_city, j))
+                next_city = j
+                break
+        if next_city == init_city:
+            break
+   
+    print("Rota:")
+    for i in range(len(solved)):
+        print(solved[i][0], ' ->> ', solved[i][1])
+
+    return solved
+
+
 if __name__ == '__main__':
     address = [
                 'Av. José Bonifácio, 245 - Farroupilha, Porto Alegre - RS, 90040-130', # Redenção
@@ -111,5 +154,6 @@ if __name__ == '__main__':
               ]
     
     distance_pares = generate_pares_distance(address)
-    print(distance_pares)
+    generate_optimize(address, distance_pares)
+    
     sleep_before_interactive(time=600)    
