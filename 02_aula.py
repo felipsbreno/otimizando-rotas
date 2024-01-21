@@ -159,7 +159,7 @@ def show_route_aoptimize(address, solution):
 if __name__ == '__main__':
     address = [
                 'Av. José Bonifácio, 245 - Farroupilha, Porto Alegre - RS, 90040-130', # Redenção
-                'AVENIDA EDVALDO PERREIRA PAIVA 3001 - Praia de Belas, Porto Alegre - RS, 91110-060', # Marinha
+                'Av. Edvaldo Pereira Paiva, 3001 - Praia de Belas, Porto Alegre - RS, 91110-060', # Marinha
                 'Av. Guaíba, 544 - Ipanema, Porto Alegre - RS, 91760-740', #Orla Ipanema
                 'Av. Padre Cacique, 2000 - Praia de Belas, Porto Alegre - RS, 90810-180', #Iberê
                 'R. Dr. Salvador França, 1427 - Jardim Botânico, Porto Alegre - RS, 90690-000' # Jardim Botânico
