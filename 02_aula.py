@@ -144,16 +144,30 @@ def generate_optimize(address, distance_pares):
 
     return solved
 
+def show_route_aoptimize(address, solution):
+    driver.get("https://www.google.com/maps")
+
+    add_destiny(address[0], 1)
+    open_routes()
+
+    for i in range(len(solution)):
+        add_destiny(address[solution[i][0]], i + 1)
+        add_more_destiny()
+    
+    add_destiny(address[0], len(address) + 1)
+
 
 if __name__ == '__main__':
     address = [
                 'Av. José Bonifácio, 245 - Farroupilha, Porto Alegre - RS, 90040-130', # Redenção
-                'Av. Borges de Medeiros, 2035 - Menino Deus, Porto Alegre - RS, 90110-150', # Marinha
+                'AVENIDA EDVALDO PERREIRA PAIVA 3001 - Praia de Belas, Porto Alegre - RS, 91110-060', # Marinha
                 'Av. Guaíba, 544 - Ipanema, Porto Alegre - RS, 91760-740', #Orla Ipanema
                 'Av. Padre Cacique, 2000 - Praia de Belas, Porto Alegre - RS, 90810-180', #Iberê
+                'R. Dr. Salvador França, 1427 - Jardim Botânico, Porto Alegre - RS, 90690-000' # ardim Botânico
               ]
     
     distance_pares = generate_pares_distance(address)
-    generate_optimize(address, distance_pares)
+    solved = generate_optimize(address, distance_pares)
+    show_route_aoptimize(address, solved)
     
     sleep_before_interactive(time=600)    
