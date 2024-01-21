@@ -124,7 +124,6 @@ def generate_optimize(address, distance_pares):
                 prob += pulp.lpSum([x[(i, j)] for i in subset for j in subset if i != j]) <= len(subset) - 1
 
     prob.solve(pulp.PULP_CBC_CMD())
-    
     solved = []
     init_city = 0
     next_city = init_city
@@ -151,7 +150,7 @@ def show_route_aoptimize(address, solution):
     open_routes()
 
     for i in range(len(solution)):
-        add_destiny(address[solution[i][0]], i + 1)
+        add_destiny(address[solution[i][0]], i+1)
         add_more_destiny()
     
     add_destiny(address[0], len(address) + 1)
@@ -163,7 +162,7 @@ if __name__ == '__main__':
                 'AVENIDA EDVALDO PERREIRA PAIVA 3001 - Praia de Belas, Porto Alegre - RS, 91110-060', # Marinha
                 'Av. Guaíba, 544 - Ipanema, Porto Alegre - RS, 91760-740', #Orla Ipanema
                 'Av. Padre Cacique, 2000 - Praia de Belas, Porto Alegre - RS, 90810-180', #Iberê
-                'R. Dr. Salvador França, 1427 - Jardim Botânico, Porto Alegre - RS, 90690-000' # ardim Botânico
+                'R. Dr. Salvador França, 1427 - Jardim Botânico, Porto Alegre - RS, 90690-000' # Jardim Botânico
               ]
     
     distance_pares = generate_pares_distance(address)
